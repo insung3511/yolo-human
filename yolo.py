@@ -19,7 +19,10 @@ ap = argparse.ArgumentParser()
 #ap.add_argument("-t", "--threshold", type=float, default=0.3,
 #	help="threshold when applyong non-maxima suppression")
 args = vars(ap.parse_args())
-print(args)
+#print(args)
+
+#confidence = 0.5
+threshold = 0.3
 
 # load the COCO class labels our YOLO model was trained on
 labelsPath = './yolo-coco/coco.names'
@@ -36,7 +39,7 @@ configPath = os.path.sep.join('./yolo-coco/yolov3.cfg')
 
 # load our YOLO object detector trained on COCO dataset (80 classes)
 print("[INFO] loading YOLO from disk...")
-net = cv2.dnn.readNetFromDarknet("./yolo-coco/yolov3.weights", "./yolo-coco/yolov3.cfg")
+net = cv2.dnn.readNetFromDarknet('./yolo-coco/yolov3.cfg', './yolo-coco/yolov3.weights')
 
 # load our input image and grab its spatial dimensions
 image = cv2.imread('./images/yg.png')
@@ -77,7 +80,7 @@ for output in layerOutputs:
 
 		# filter out weak predictions by ensuring the detected
 		# probability is greater than the minimum probability
-		if confidence > args["confidence"]:
+		if confidence > 0.5:
 			# scale the bounding box coordinates back relative to the
 			# size of the image, keeping in mind that YOLO actually
 			# returns the center (x, y)-coordinates of the bounding
@@ -98,8 +101,8 @@ for output in layerOutputs:
 
 # apply non-maxima suppression to suppress weak, overlapping bounding
 # boxes
-idxs = cv2.dnn.NMSBoxes(boxes, confidences, args["confidence"],
-	args["threshold"])
+idxs = cv2.dnn.NMSBoxes(boxes, confidences, confidence,
+	threshold)
 
 # ensure at least one detection exists
 
