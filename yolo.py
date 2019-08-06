@@ -106,6 +106,6 @@ def AnyBodyHere(input_path):
 # LABELS[classIDs[i]]가 태그. person이 사람이니까 person있으면 바로 return시키는 식으로 함수로 분리하면 될듯.
 
 def main():
-	AnyBodyHere('./images/yg.png')
+	print(AnyBodyHere('./images/yg.png'))
 
 main()
