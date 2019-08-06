@@ -99,9 +99,8 @@ def AnyBodyHere(input_path):
 		# loop over the indexes we are keeping
 		for i in idxs.flatten():
 			if LABELS[classIDs[i]] == 'person':
-				print("Human found")
-				exit()
-	print("No human")
+				return True
+	return False
 
 
 # LABELS[classIDs[i]]가 태그. person이 사람이니까 person있으면 바로 return시키는 식으로 함수로 분리하면 될듯.
