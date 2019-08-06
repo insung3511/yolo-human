@@ -110,19 +110,10 @@ idxs = cv2.dnn.NMSBoxes(boxes, confidences, confidence,
 if len(idxs) > 0:
 	# loop over the indexes we are keeping
 	for i in idxs.flatten():
-		# extract the bounding box coordinates
-		(x, y) = (boxes[i][0], boxes[i][1])
-		(w, h) = (boxes[i][2], boxes[i][3])
+		if LABELS[classIDs[i]] == 'person':
+			print("Human found")
+			exit()
+print("No human")
 
-		# draw a bounding box rectangle and label on the image
-		color = [int(c) for c in COLORS[classIDs[i]]]
-		cv2.rectangle(image, (x, y), (x + w, y + h), color, 2)
-		text = "{}: {:.4f}".format(LABELS[classIDs[i]], confidences[i])
-		cv2.putText(image, text, (x, y - 5), cv2.FONT_HERSHEY_SIMPLEX,
-			0.5, color, 2)
-
-# 결과물 출력
-cv2.imshow("Image", image)
-cv2.waitKey(0)
 
 # LABELS[classIDs[i]]가 태그. person이 사람이니까 person있으면 바로 return시키는 식으로 함수로 분리하면 될듯.
