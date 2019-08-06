@@ -3,12 +3,32 @@
 # import the necessary packages
 import numpy as np
 import argparse
-import time
+#import time
 import cv2
 import os
+from time import sleep
+from PIL import Image
 
+def CaptureCam():
+	CAM_ID = 0
+	def capture(camid = CAM_ID):
+		cam = cv2.VideoCapture(camid)
+		sleep(3)
+		if cam.isOpened() == False:
+			print ('cant open the cam (%d)' % camid)
+			return None
+			
+		ret, frame = cam.read()
 
-def AnyBodyHere(input_path):
+		# png로 압축 없이 영상 저장
+		cv2.imwrite('test.png',frame, params=[cv2.IMWRITE_PNG_COMPRESSION,0])
+		cam.release()
+
+	if __name__ == '__main__':
+		capture()
+
+def AnyBodyHere(input_path, output_path):
+
 	#confidence = 0.5
 	threshold = 0.3
 
@@ -26,7 +46,6 @@ def AnyBodyHere(input_path):
 	configPath = os.path.sep.join('./yolo-coco/yolov3.cfg')
 
 	# load our YOLO object detector trained on COCO dataset (80 classes)
-	print("[INFO] loading YOLO from disk...")
 	net = cv2.dnn.readNetFromDarknet('./yolo-coco/yolov3.cfg', './yolo-coco/yolov3.weights')
 
 	# load our input image and grab its spatial dimensions
@@ -43,12 +62,7 @@ def AnyBodyHere(input_path):
 	blob = cv2.dnn.blobFromImage(image, 1 / 255.0, (416, 416),
 		swapRB=True, crop=False)
 	net.setInput(blob)
-	start = time.time()
 	layerOutputs = net.forward(ln)
-	end = time.time()
-
-	# show timing information on YOLO
-	print("[INFO] YOLO took {:.6f} seconds".format(end - start))
 
 	# initialize our lists of detected bounding boxes, confidences, and
 	# class IDs, respectively
@@ -95,17 +109,37 @@ def AnyBodyHere(input_path):
 	# ensure at least one detection exists
 
 	# 데이터를 바탕으로 사진에 그리는 부분
+	isPersonHere = False
 	if len(idxs) > 0:
-		# loop over the indexes we are keeping
+	# loop over the indexes we are keeping
 		for i in idxs.flatten():
 			if LABELS[classIDs[i]] == 'person':
-				return True
-	return False
+				if not isPersonHere:
+					isPersonHere = True
+				# extract the bounding box coordinates
+				(x, y) = (boxes[i][0], boxes[i][1])
+				(w, h) = (boxes[i][2], boxes[i][3])
+				
+
+				# draw a bounding box rectangle and label on the image
+				color = [int(c) for c in COLORS[classIDs[i]]]
+				cv2.rectangle(image, (x, y), (x + w, y + h), color, 2)
+				text = "{}: {:.4f}".format(LABELS[classIDs[i]], confidences[i])
+				cv2.putText(image, text, (x, y - 5), cv2.FONT_HERSHEY_SIMPLEX,
+					0.5, color, 2)
+				cv2.imwrite(output_path, image)
+	if isPersonHere == False:
+		cv2.imwrite(output_path, image)
+	return isPersonHere
 
 
 # LABELS[classIDs[i]]가 태그. person이 사람이니까 person있으면 바로 return시키는 식으로 함수로 분리하면 될듯.
 
 def main():
-	print(AnyBodyHere('./images/yg.png'))
-
+	i = 0
+	while (True):
+		CaptureCam()
+		print(AnyBodyHere('./test.png', 'result' + str(i) + '.jpg'))
+		sleep(1)
+		i += 1
 main()
