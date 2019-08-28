@@ -59,8 +59,8 @@ try:
 # an error occurred while trying to determine the total
 # number of frames in the video file
 except:
-	print("[INFO] could not determine # of frames in video")
-	print("[INFO] no approx. completion time can be provided")
+	print("[ERRO] could not determine # of frames in video")
+	print("[ERRO] no approx. completion time can be provided")
 	total = -1
 
 # loop over frames from the video file stream
@@ -158,7 +158,8 @@ while True:
 			elap = (end - start)
 			print("[INFO] single frame took {:.4f} seconds".format(elap))
 			print("[INFO] estimated total time to finish: {:.4f}".format(
-				elap * total))
+				(elap * total)/60))
+			print("[INFO] elap : {:.4f} | total : {:.4f}".format(elap, total))
 
 	# write the output frame to disk
 	writer.write(frame)
