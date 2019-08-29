@@ -162,7 +162,10 @@ while True:
 			print("[INFO] elap : {:.4f} | total : {:.4f}".format(elap, total))
 
 	# write the output frame to disk
-	writer.write(frame)
+	#writer.write(frame)
+	cv2.VideoWriter('output.mp4', cv2.VideoWriter_fourcc(*'DIVX'), 25.0, (640,480))
+	#print("[INFO] Rendering...")
+	#cv2.imshow('Result',frame)
 
 # release the file pointers
 print("[INFO] cleaning up...")
