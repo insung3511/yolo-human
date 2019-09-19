@@ -1,7 +1,5 @@
 # USAGE
 # python yolo_video.py --input videos/airport.mp4 --output output/airport_output.avi --yolo yolo-coco
-
-# import the necessary packages
 import numpy as np
 import argparse
 import imutils
@@ -9,7 +7,6 @@ import time
 import cv2
 import os
 
-# construct the argument parse and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-i", "--input", required=True,
 	help="path to input video")
@@ -163,7 +160,7 @@ while True:
 
 	# write the output frame to disk
 	#writer.write(frame)
-	cv2.VideoWriter('output.mp4', cv2.VideoWriter_fourcc(*'DIVX'), 25.0, (640,480))
+	cv2.VideoWriter('output.avi', cv2.VideoWriter_fourcc(*'DIVX'), 25.0, (640,480))
 	#print("[INFO] Rendering...")
 	#cv2.imshow('Result',frame)
 
@@ -171,3 +168,4 @@ while True:
 print("[INFO] cleaning up...")
 writer.release()
 vs.release()
+print("[EXIT] Done :)")
