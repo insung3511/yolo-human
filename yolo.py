@@ -1,4 +1,4 @@
-# USAGE
+# USAGE4
 # python yolo.py --image images/baggage_claim.jpg --yolo yolo-coco
 
 # import the necessary packages
@@ -6,7 +6,7 @@ import numpy as np
 import argparse
 import time
 import cv2
-import os
+import os sex
 
 # construct the argument parse and parse the arguments
 ap = argparse.ArgumentParser()
