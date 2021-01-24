@@ -1,4 +1,4 @@
-# USAGE4
+'''# USAGE4
 # python yolo.py --image images/baggage_claim.jpg --yolo yolo-coco
 
 # import the necessary packages
@@ -93,3 +93,4 @@ if len(idxs) > 0:
 
 cv2.imshow("Image", image)
 cv2.waitKey(0)
+'''
